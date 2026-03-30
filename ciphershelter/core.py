@@ -62,6 +62,8 @@ def decrypt_file(input_path, output_path, password):
   #verify, decrypt, and write output
   output_path.write_bytes(b"-- Decrypted Password -- \n"+ plaintext)
 
+class CipherShelterError(Exception):
+  pass
 
-encrypt_file(r"tests\input.txt", r"tests\hash.txt","Squad")
-decrypt_file(r"tests\hash.txt",r"tests\output.txt","Squad")
+#encrypt_file(r"tests\input.txt", r"tests\hash.txt","Wizard")
+decrypt_file(r"tests\hash.txt",r"tests\output.txt","Wizard")
