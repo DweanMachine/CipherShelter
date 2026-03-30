@@ -40,4 +40,4 @@ def load_key(path: Path) -> bytes:
   return key
 
 
-print(validate_key(b"invalid_key"))
+#print(validate_key(b"invalid_key"))

@@ -1,10 +1,10 @@
 #Encrpytion/Decryption Logic
-import base64
 import os
+import base64
 from pathlib import Path
 from cryptography.fernet import Fernet 
-from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from cryptography.hazmat.primitives import hashes
 
 SALT_SIZE = 16
 KEY_LENGTH = 32
@@ -21,8 +21,8 @@ def encrypt_file(input_path, output_path, password):
 
   #Validate input/output paths
   if not input_path.exists():
-        raise FileNotFoundError(f"Input file not found: {input_path}")
-
+    raise FileNotFoundError(f"Input file not found: {input_path}")
+  
   if input_path.is_dir():
     raise IsADirectoryError("encrypt_file expects a file, not a directory.")
 
@@ -32,6 +32,7 @@ def encrypt_file(input_path, output_path, password):
   #derive key from PBKDF2
   key = derive_key(password, salt)
   f = Fernet(key)
+  
   plaintext = input_path.read_bytes()
   ciphertext = f.encrypt(plaintext)
 
@@ -60,10 +61,10 @@ def decrypt_file(input_path, output_path, password):
   plaintext = f.decrypt(ciphertext)
 
   #verify, decrypt, and write output
-  output_path.write_bytes(b"-- Decrypted Password -- \n"+ plaintext)
+  output_path.write_bytes(plaintext)
 
 class CipherShelterError(Exception):
   pass
 
 #encrypt_file(r"tests\input.txt", r"tests\hash.txt","Wizard")
-decrypt_file(r"tests\hash.txt",r"tests\output.txt","Wizard")
+#decrypt_file(r"tests\hash.txt",r"tests\output.txt","Wizard")
