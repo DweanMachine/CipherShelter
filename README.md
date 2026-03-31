@@ -20,7 +20,7 @@ Ciphershelter is a python-based application which encrypts & decrypts files with
  
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/CipherShelter.git
+git clone https://github.com/DweanMachine/CipherShelter.git
 cd CipherShelter
  
 # Install in editable mode
