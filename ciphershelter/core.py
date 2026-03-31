@@ -10,7 +10,7 @@ SALT_SIZE = 16
 KEY_LENGTH = 32
 
 def derive_key(password: str, salt: bytes) -> bytes:
-  kdf = PBKDF2HMAC(algorithm=hashes.SHA256(), length=KEY_LENGTH, salt=salt, iterations=1_200_000)
+  kdf = PBKDF2HMAC(algorithm=hashes.SHA256(), length=KEY_LENGTH, salt=salt, iterations=480_000)
   return base64.urlsafe_b64encode(kdf.derive(password.encode()))
 
 def encrypt_file(input_path, output_path, password): 
