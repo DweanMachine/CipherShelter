@@ -1,11 +1,21 @@
-from core import *
+#Execution: python -m ciphershelter.cli
+from ciphershelter.core import encrypt_file, decrypt_file, CipherShelterError
+import getpass
+import string
 
-def checkPasswordStrength(password):
-  has_number = any(char.isdigit() for char in password)
-  if len(password) >= 8 and has_number:
-    return True
-  print("Password must be at least 8 characters long and contain at least one number.")
-  return False
+def check_password_strength(password: str) -> bool:
+  rules = [ #List of password requirements
+    (len(password) >= 8, "at least 8 characters"),
+    (any(char.isdigit() for char in password), "at least one number"),
+    (any(char.isupper() for char in password), "at least one capital letter"),
+    (any(char in string.punctuation for char in password), "at least one special character")
+  ]
+
+  failed = [msg for passed, msg in rules if not passed]
+  if failed:
+    print("Password must contain: " + ", ".join(failed) + ".")
+    return False
+  return True
 
 def main():
   print("Welcome to CipherShelter!")
@@ -15,36 +25,37 @@ def main():
   print("[2] Decrypt a file")
   print("[3] Exit")
 
-  choice = input("Enter your choice: ")
+  while True:
+    choice = input("Enter your choice: ")
+    if choice in ("1", "2", "3"):
+        break
+    print("\n-- INVALID CHOICE! PLEASE ENTER 1, 2, OR 3 --")
 
   if choice == "1":
     input_path = input("Enter the path of the file to encrypt: ")
     output_path = input("Enter the path for the encrypted file: ")
     while True:
-      password = input("Enter the password for decryption: ")
-      if checkPasswordStrength(password): #check password strength before proceeding
+      password = getpass.getpass(prompt="Enter the password to encrypt with: ")
+      if check_password_strength(password): #check password strength before proceeding
         break
     try:
       encrypt_file(input_path, output_path, password)
       print(f"File encrypted successfully: {output_path}")
-    except Exception as e:
+    except CipherShelterError as e:
       print(f"Error encrypting file: {e}")
 
   elif choice == "2":
     input_path = input("Enter the path of the file to decrypt: ")
     output_path = input("Enter the path for the decrypted file: ")
-    password = input("Enter the password for decryption: ")
+    password = getpass.getpass(prompt="Enter the password for decryption: ")
     try:
       decrypt_file(input_path, output_path, password)
       print(f"File decrypted successfully: {output_path}")
-    except Exception as e:
+    except CipherShelterError as e:
       print(f"Error decrypting file: {e}")
 
   elif choice == "3":
     print("Exiting CipherShelter. Goodbye!")
-  else:
-    print("\n-- INVALID CHOICE! PLEASE ENTER 1, 2, OR 3! --\n")
-    main()
-
-main()
-
+    
+if __name__ == "__main__":
+  main()
